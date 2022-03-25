@@ -6,7 +6,7 @@
 ![Python 3](https://github.com/INTI-CMNB/KiBoM/workflows/Python%203/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/INTI-CMNB/KiBoM/badge.svg?branch=master&service=github)](https://coveralls.io/github/INTI-CMNB/KiBoM?branch=master)
 
-Configurable BoM generation tool for KiCad EDA (http://kicad-pcb.org/)
+Configurable BoM generation tool for KiCad EDA (http://kicad.org/)
 
 ## Description
 
