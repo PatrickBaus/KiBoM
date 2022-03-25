@@ -4,7 +4,6 @@ import tempfile
 import logging
 import subprocess
 import re
-import pytest
 import csv
 import sys
 from glob import glob
@@ -38,7 +37,7 @@ else:
 
 class TestContext(object):
 
-    def __init__(self, test_name, prj_name, ext, config_name=None):
+    def __init__(self, test_dir, test_name, prj_name, ext, config_name=None):
         # We are using PCBs
         self.mode = MODE_PCB
         # The name used for the test output dirs and other logging
@@ -50,7 +49,7 @@ class TestContext(object):
         # The INI file we'll use
         self._get_config_name(config_name)
         # The actual output dir for this run
-        self._set_up_output_dir(pytest.config.getoption('test_dir'))
+        self._set_up_output_dir(test_dir)
         # Output format
         self.ext = ext
         # stdout and stderr from the run

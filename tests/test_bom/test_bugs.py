@@ -19,11 +19,11 @@ if prev_dir not in sys.path:
 from utils import context  # noqa: E402
 
 
-def test_column_sensitive():
+def test_column_sensitive(test_dir):
     """ Test if the COLUMN_ORDER section can contain columns in lowercase """
     prj = 'links'
     ext = 'csv'
-    ctx = context.TestContext('ColumnSensitive', prj, ext, 'column_sensitive')
+    ctx = context.TestContext(test_dir, 'ColumnSensitive', prj, ext, 'column_sensitive')
     ctx.run()
     out = prj + '.' + ext
     heads = ctx.load_csv_header(out)
@@ -32,10 +32,10 @@ def test_column_sensitive():
     ctx.clean_up()
 
 
-def test_variants_issue_SG136_default():
+def test_variants_issue_SG136_default(test_dir):
     prj = 'kibom-variant_2'
     ext = 'csv'
-    ctx = context.TestContext('test_variants_issue_SG136_default', prj, ext)
+    ctx = context.TestContext(test_dir, 'test_variants_issue_SG136_default', prj, ext)
     extra = ['-r', 'default']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(default).' + ext
@@ -49,10 +49,10 @@ def test_variants_issue_SG136_default():
     ctx.clean_up()
 
 
-def test_variants_issue_SG136_production():
+def test_variants_issue_SG136_production(test_dir):
     prj = 'kibom-variant_2'
     ext = 'csv'
-    ctx = context.TestContext('test_variants_issue_SG136_production', prj, ext, 'production')
+    ctx = context.TestContext(test_dir, 'test_variants_issue_SG136_production', prj, ext, 'production')
     ctx.run()
     # ctx.run(no_config_file=True, extra=['-r', 'production'])
     out = prj + '_bom_A_(production).' + ext
@@ -66,10 +66,10 @@ def test_variants_issue_SG136_production():
     ctx.clean_up()
 
 
-def test_variants_issue_SG136_test():
+def test_variants_issue_SG136_test(test_dir):
     prj = 'kibom-variant_2'
     ext = 'csv'
-    ctx = context.TestContext('test_variants_issue_SG136_test', prj, ext)
+    ctx = context.TestContext(test_dir, 'test_variants_issue_SG136_test', prj, ext)
     extra = ['-r', 'test']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(test).' + ext

@@ -83,10 +83,10 @@ def check_dnc(rows, comp, column=6):
             return
 
 
-def test_bom_simple_csv():
+def test_bom_simple_csv(test_dir):
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('BoMSimpleCSV', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSimpleCSV', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out)
@@ -95,10 +95,10 @@ def test_bom_simple_csv():
     ctx.clean_up()
 
 
-def test_bom_simple_html():
+def test_bom_simple_html(test_dir):
     prj = 'kibom-test'
     ext = 'html'
-    ctx = context.TestContext('BoMSimpleHTML', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSimpleHTML', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components, rows_dnf, dnf = ctx.load_html(out)
@@ -108,10 +108,10 @@ def test_bom_simple_html():
     ctx.clean_up()
 
 
-def test_bom_simple_xml():
+def test_bom_simple_xml(test_dir):
     prj = 'kibom-test'
     ext = 'xml'
-    ctx = context.TestContext('BoMSimpleXML', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSimpleXML', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_xml(out)
@@ -119,10 +119,10 @@ def test_bom_simple_xml():
     ctx.clean_up()
 
 
-def test_bom_simple_xlsx():
+def test_bom_simple_xlsx(test_dir):
     prj = 'kibom-test'
     ext = 'xlsx'
-    ctx = context.TestContext('BoMSimpleXLSX', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSimpleXLSX', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_xlsx(out)
@@ -130,10 +130,10 @@ def test_bom_simple_xlsx():
     ctx.clean_up()
 
 
-def test_bom_deep_subdir():
+def test_bom_deep_subdir(test_dir):
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('BoMDeepSubdir', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMDeepSubdir', prj, ext)
     sub_dir = os.path.join('1', '2', '3')
     extra = ['-d', os.path.abspath(os.path.join(ctx.output_dir, sub_dir))]
     ctx.run(no_config_file=True, no_subdir=True, extra=extra)
@@ -143,11 +143,11 @@ def test_bom_deep_subdir():
     ctx.clean_up()
 
 
-def test_bom_same_dir():
+def test_bom_same_dir(test_dir):
     """ The default behavior: put the output along with the netlist """
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('BoMSameDir', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSameDir', prj, ext)
     ctx.run(no_config_file=True, no_subdir=True)
     fn = prj + '_bom_A.' + ext
     out = os.path.join(ctx.get_board_dir(), fn)
@@ -158,11 +158,11 @@ def test_bom_same_dir():
     ctx.clean_up()
 
 
-def test_bom_rel_dir():
+def test_bom_rel_dir(test_dir):
     """ Relative sub directory (from netlist) """
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('BoMRelSubDir', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMRelSubDir', prj, ext)
     sub_dir = os.path.join('1', '2', '3')
     extra = ['-d', sub_dir]
     ctx.run(no_config_file=True, no_subdir=True, extra=extra)
@@ -176,10 +176,10 @@ def test_bom_rel_dir():
     ctx.clean_up()
 
 
-def test_variant_t1_1():
+def test_variant_t1_1(test_dir):
     prj = 'kibom-variante'
     ext = 'csv'
-    ctx = context.TestContext('BoMVar_t1_1', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMVar_t1_1', prj, ext)
     extra = ['-r', 'V1']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(V1).' + ext
@@ -195,10 +195,10 @@ def test_variant_t1_1():
     ctx.clean_up()
 
 
-def test_variant_t1_2():
+def test_variant_t1_2(test_dir):
     prj = 'kibom-variante'
     ext = 'csv'
-    ctx = context.TestContext('BoMVar_t1_2', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMVar_t1_2', prj, ext)
     extra = ['-r', 'V2']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(V2).' + ext
@@ -213,10 +213,10 @@ def test_variant_t1_2():
     ctx.clean_up()
 
 
-def test_variant_t1_3():
+def test_variant_t1_3(test_dir):
     prj = 'kibom-variante'
     ext = 'csv'
-    ctx = context.TestContext('BoMVar_t1_3', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMVar_t1_3', prj, ext)
     extra = ['-r', 'V3']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(V3).' + ext
@@ -231,10 +231,10 @@ def test_variant_t1_3():
     ctx.clean_up()
 
 
-def test_variant_t1_4():
+def test_variant_t1_4(test_dir):
     prj = 'kibom-variante'
     ext = 'csv'
-    ctx = context.TestContext('BoMVar_t1_4', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMVar_t1_4', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out)
@@ -249,11 +249,11 @@ def test_variant_t1_4():
     ctx.clean_up()
 
 
-def test_variant_t1_5():
+def test_variant_t1_5(test_dir):
     """ default union V3 """
     prj = 'kibom-variante'
     ext = 'csv'
-    ctx = context.TestContext('BoMVar_t1_1', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMVar_t1_1', prj, ext)
     extra = ['-r', 'V1,V3']
     ctx.run(no_config_file=True, extra=extra)
     out = prj + '_bom_A_(V1,V3).' + ext
@@ -268,10 +268,10 @@ def test_variant_t1_5():
     ctx.clean_up()
 
 
-def test_sort_1():
+def test_sort_1(test_dir):
     prj = 'RLC_sort'
     ext = 'csv'
-    ctx = context.TestContext('BoMSort1', prj, ext)
+    ctx = context.TestContext(test_dir, 'BoMSort1', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out)
@@ -282,10 +282,10 @@ def test_sort_1():
     ctx.clean_up()
 
 
-def test_datasheet_link():
+def test_datasheet_link(test_dir):
     prj = 'links'
     ext = 'html'
-    ctx = context.TestContext('DataSheetLink', prj, ext, 'datasheet_link')
+    ctx = context.TestContext(test_dir, 'DataSheetLink', prj, ext, 'datasheet_link')
     ctx.run()
     out = prj + '.' + ext
     rows, components, rows_dnf, dnf = ctx.load_html(out, 3, False)
@@ -298,10 +298,10 @@ def test_datasheet_link():
     ctx.clean_up()
 
 
-def test_digikey_link():
+def test_digikey_link(test_dir):
     prj = 'links'
     ext = 'html'
-    ctx = context.TestContext('DigiKeyLink', prj, ext, 'digikey_link')
+    ctx = context.TestContext(test_dir, 'DigiKeyLink', prj, ext, 'digikey_link')
     ctx.run()
     out = prj + '.' + ext
     rows, components, rows_dnf, dnf = ctx.load_html(out, 5, False)
@@ -314,10 +314,10 @@ def test_digikey_link():
     ctx.clean_up()
 
 
-def test_join_1():
+def test_join_1(test_dir):
     prj = 'join'
     ext = 'html'
-    ctx = context.TestContext('Join_1', prj, ext, 'join')
+    ctx = context.TestContext(test_dir, 'Join_1', prj, ext, 'join')
     ctx.run()
     out = prj + '.' + ext
     rows, components, rows_dnf, dnf = ctx.load_html(out, 2, False)
@@ -329,11 +329,11 @@ def test_join_1():
     ctx.clean_up()
 
 
-def test_include_dnf():
+def test_include_dnf(test_dir):
     """ ignore_dnf = 0 """
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('IncludeDNF', prj, ext, 'include_dnf')
+    ctx = context.TestContext(test_dir, 'IncludeDNF', prj, ext, 'include_dnf')
     ctx.run()
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out)
@@ -342,11 +342,11 @@ def test_include_dnf():
     ctx.clean_up()
 
 
-def test_html_dont_generate_dnf():
+def test_html_dont_generate_dnf(test_dir):
     """ html_generate_dnf = 0 """
     prj = 'kibom-test'
     ext = 'html'
-    ctx = context.TestContext('DontGenerateDNF', prj, ext, 'html_dont_generate_dnf')
+    ctx = context.TestContext(test_dir, 'DontGenerateDNF', prj, ext, 'html_dont_generate_dnf')
     ctx.run()
     out = prj + '_bom_A.' + ext
     rows, components, rows_dnf, dnf = ctx.load_html(out)
@@ -355,11 +355,11 @@ def test_html_dont_generate_dnf():
     ctx.clean_up()
 
 
-def test_use_alt():
+def test_use_alt(test_dir):
     """ use_alt = 1 """
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('UseAlt', prj, ext, 'use_alt')
+    ctx = context.TestContext(test_dir, 'UseAlt', prj, ext, 'use_alt')
     ctx.run()
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out)
@@ -367,10 +367,10 @@ def test_use_alt():
     ctx.clean_up()
 
 
-def test_no_number_rows():
+def test_no_number_rows(test_dir):
     prj = 'kibom-test'
     ext = 'csv'
-    ctx = context.TestContext('NoNumberRows', prj, ext, 'no_numbers')
+    ctx = context.TestContext(test_dir, 'NoNumberRows', prj, ext, 'no_numbers')
     ctx.run()
     out = prj + '_bom_A.' + ext
     rows, components = ctx.load_csv(out, 2)
@@ -379,10 +379,10 @@ def test_no_number_rows():
     ctx.clean_up()
 
 
-def test_column_rename_csv():
+def test_column_rename_csv(test_dir):
     prj = 'links'
     ext = 'csv'
-    ctx = context.TestContext('ColumnRenameCSV', prj, ext, 'col_rename')
+    ctx = context.TestContext(test_dir, 'ColumnRenameCSV', prj, ext, 'col_rename')
     ctx.run()
     out = prj + '.' + ext
     heads = ctx.load_csv_header(out)
@@ -392,10 +392,10 @@ def test_column_rename_csv():
     ctx.clean_up()
 
 
-def test_column_rename_html():
+def test_column_rename_html(test_dir):
     prj = 'links'
     ext = 'html'
-    ctx = context.TestContext('ColumnRenameHTML', prj, ext, 'col_rename')
+    ctx = context.TestContext(test_dir, 'ColumnRenameHTML', prj, ext, 'col_rename')
     ctx.run()
     out = prj + '.' + ext
     heads = ctx.load_html_header(out)
@@ -405,10 +405,10 @@ def test_column_rename_html():
     ctx.clean_up()
 
 
-def test_column_rename_xml():
+def test_column_rename_xml(test_dir):
     prj = 'links'
     ext = 'xml'
-    ctx = context.TestContext('ColumnRenameXML', prj, ext, 'col_rename')
+    ctx = context.TestContext(test_dir, 'ColumnRenameXML', prj, ext, 'col_rename')
     ctx.run()
     out = prj + '.' + ext
     rows, components = ctx.load_xml(out, 'Referencias')
@@ -421,10 +421,10 @@ def test_column_rename_xml():
     ctx.clean_up()
 
 
-def test_column_rename_xlsx():
+def test_column_rename_xlsx(test_dir):
     prj = 'links'
     ext = 'xlsx'
-    ctx = context.TestContext('ColumnRenameXLSX', prj, ext, 'col_rename')
+    ctx = context.TestContext(test_dir, 'ColumnRenameXLSX', prj, ext, 'col_rename')
     ctx.run()
     out = prj + '.' + ext
     rows, components = ctx.load_xlsx(out, 2, True)
@@ -434,10 +434,10 @@ def test_column_rename_xlsx():
     ctx.clean_up()
 
 
-def test_group_connectors():
+def test_group_connectors(test_dir):
     prj = 'connectors'
     ext = 'csv'
-    ctx = context.TestContext('GroupConnectors', prj, ext)
+    ctx = context.TestContext(test_dir, 'GroupConnectors', prj, ext)
     ctx.run(no_config_file=True)
     out = prj + '_bom_.' + ext
     rows, components = ctx.load_csv(out)
@@ -445,10 +445,10 @@ def test_group_connectors():
     ctx.clean_up()
 
 
-def test_no_group_connectors():
+def test_no_group_connectors(test_dir):
     prj = 'connectors'
     ext = 'csv'
-    ctx = context.TestContext('NoGroupConnectors', prj, ext, 'no_group_connectors')
+    ctx = context.TestContext(test_dir, 'NoGroupConnectors', prj, ext, 'no_group_connectors')
     ctx.run()
     out = prj + '_bom_.' + ext
     rows, components = ctx.load_csv(out)
