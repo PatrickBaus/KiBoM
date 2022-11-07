@@ -7,6 +7,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.8.0-3] - 2022-11-07
+### Added
+- Mouser links
+- Mechanism to rename columns
+- Support for variants of the Value field through the DNP check (no break)
+- Generic format handler for VARIANT:FIELD pair
+
+### Fixed
+- Digi-Key links
+- Documentation for white space separator (they are tabs)
+- `ref_separator` not showing with alt refs
+- DNP check is now case insensitive, all components are now going
+- `ref_separator` not showing with alt refs
+- The `ref_separator` save
+
 ## [1.8.0-2] - 2020-09-11
 ### Added
 - 'Sheetpath' column (by @hkennyv)
