@@ -1,3 +1,19 @@
+kibom.inti-cmnb (1.8.0-3) stable; urgency=medium
+
+  * Fixed Digi-Key links
+  * Added Mouser links
+  * Fixed documentation for white space separator (they are tabs)
+  * Added mechanism to rename columns
+  * Fixed ref_separator not showing with alt refs
+  * Added support for variants of the Value field
+  * Fixed DNP check is now case insensitive, all components are now going
+    through the DNP check (no break)
+  * Added generic format handler for VARIANT:FIELD pair
+  * Fixed ref_separator not showing with alt refs
+  * Fixed the ref_separator save
+
+ -- Salvador E. Tropea <salvador@inti.gob.ar>  Mon, 07 Nov 2022 11:17:45 -0300
+
 kibom.inti-cmnb (1.8.0-2) stable; urgency=medium
 
   * Fixed variants logic and fields case-sensitive details
