@@ -28,6 +28,7 @@ class BomPref:
     SECTION_COLUMN_RENAME = "COLUMN_RENAME"  # (#120)
 
     OPT_DIGIKEY_LINK = "digikey_link"
+    OPT_MOUSER_LINK = "mouser_link"
     OPT_PCB_CONFIG = "pcb_configuration"
     OPT_NUMBER_ROWS = "number_rows"
     OPT_GROUP_CONN = "group_connectors"
@@ -65,6 +66,7 @@ class BomPref:
         self.useRegex = True  # Test various columns with regex
 
         self.digikey_link = ''  # Columns to link to Digi-Key
+        self.mouser_link = ''  # Columns to link to Mouser (requires Mouser-PartNO)
         self.boards = 1  # Quantity of boards to be made
         self.mergeBlankFields = True  # Blanks fields will be merged when possible
         self.hideHeaders = False
@@ -171,6 +173,7 @@ class BomPref:
             self.backup = self.checkStr(self.OPT_BACKUP, default='')
             self.as_link = self.checkStr(self.OPT_DATASHEET_AS_LINK, default='')
             self.digikey_link = self.checkStr(self.OPT_DIGIKEY_LINK, default='')
+            self.mouser_link = self.checkStr(self.OPT_MOUSER_LINK, default='')
             self.hideHeaders = self.checkOption(self.OPT_HIDE_HEADERS, default=False)
             self.hidePcbInfo = self.checkOption(self.OPT_HIDE_PCB_INFO, default=False)
             self.configField = self.checkStr(self.OPT_CONFIG_FIELD, default=self.configField).lower()
@@ -281,6 +284,9 @@ class BomPref:
 
         cf.set(self.SECTION_GENERAL, '; Interpret as a Digikey P/N and link the following field')
         cf.set(self.SECTION_GENERAL, self.OPT_DIGIKEY_LINK, self.digikey_link)
+        
+        cf.set(self.SECTION_GENERAL, '; Interpret as a MOUSER P/N and link the following field')
+        cf.set(self.SECTION_GENERAL, self.OPT_MOUSER_LINK, self.mouser_link)
 
         cf.add_section(self.SECTION_IGNORE)
         cf.set(self.SECTION_IGNORE, "; Any column heading that appears here will be excluded from the Generated BoM")
@@ -307,7 +313,7 @@ class BomPref:
 
         cf.add_section(self.SECTION_ALIASES)
         cf.set(self.SECTION_ALIASES, "; A series of values which are considered to be equivalent for the part name")
-        cf.set(self.SECTION_ALIASES, "; Each line represents a list of equivalent component name values separated by a tab")
+        cf.set(self.SECTION_ALIASES, "; Each line represents a list of equivalent component name values separated by a tab character")
         cf.set(self.SECTION_ALIASES, "; e.g. 'c\tc_small\tcap' will ensure the equivalent capacitor symbols can be grouped together")
         cf.set(self.SECTION_ALIASES, '; Aliases are case-insensitive')
 
