@@ -3,7 +3,7 @@
 try:
     import xlsxwriter
 except:
-    def WriteXLSX(filename, groups, net, headings, head_names, prefs):  # (#120)
+    def WriteXLSX(filename, groups, net, headings, head_names, prefs):
         return False
 else:
     import os
@@ -18,7 +18,7 @@ else:
     prefs = BomPref object
     """
 
-    def WriteXLSX(filename, groups, net, headings, head_names, prefs):  # (#120)
+    def WriteXLSX(filename, groups, net, headings, head_names, prefs):
 
         filename = os.path.abspath(filename)
 
@@ -33,7 +33,7 @@ else:
         workbook = xlsxwriter.Workbook(filename)
         worksheet = workbook.add_worksheet()
 
-        if prefs.numberRows:  # (#120)
+        if prefs.numberRows:
             comp = "Component"
             if comp.lower() in prefs.colRename:
                 comp = prefs.colRename[comp.lower()]

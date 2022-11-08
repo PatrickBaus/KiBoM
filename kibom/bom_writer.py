@@ -37,7 +37,7 @@ def WriteBoM(filename, groups, net, headings=columns.ColumnList._COLUMNS_DEFAULT
     if not prefs:
         prefs = BomPref()
 
-    # Remove any headings that appear in the ignore[] list (#120)
+    # Remove any headings that appear in the ignore[] list
     headings = [h for h in headings if not h.lower() in prefs.ignore]
     # Allow renaming the columns
     head_names = [h if h.lower() not in prefs.colRename else prefs.colRename[h.lower()] for h in headings]
@@ -56,28 +56,28 @@ def WriteBoM(filename, groups, net, headings=columns.ColumnList._COLUMNS_DEFAULT
 
     # CSV file writing
     if ext in ["csv", "tsv", "txt"]:
-        if WriteCSV(filename, groups, net, headings, head_names, prefs):  # (#120)
+        if WriteCSV(filename, groups, net, headings, head_names, prefs):
             debug.info("CSV Output -> {fn}".format(fn=filename))
             result = True
         else:
             debug.error("Error writing CSV output")
 
     elif ext in ["htm", "html"]:
-        if WriteHTML(filename, groups, net, headings, head_names, prefs):  # (#120)
+        if WriteHTML(filename, groups, net, headings, head_names, prefs):
             debug.info("HTML Output -> {fn}".format(fn=filename))
             result = True
         else:
             debug.error("Error writing HTML output")
 
     elif ext in ["xml"]:
-        if WriteXML(filename, groups, net, headings, head_names, prefs):  # (#120)
+        if WriteXML(filename, groups, net, headings, head_names, prefs):
             debug.info("XML Output -> {fn}".format(fn=filename))
             result = True
         else:
             debug.error("Error writing XML output")
 
     elif ext in ["xlsx"]:
-        if WriteXLSX(filename, groups, net, headings, head_names, prefs):  # (#120)
+        if WriteXLSX(filename, groups, net, headings, head_names, prefs):
             debug.info("XLSX Output -> {fn}".format(fn=filename))
             result = True
         else:
