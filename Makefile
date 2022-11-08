@@ -3,7 +3,7 @@ PY_COV=python3-coverage
 BROWSER=x-www-browser
 PYTEST=pytest-3
 OUT_DIR=output
-SINGLE_TEST=test_bom_ok
+SINGLE_TEST?=test_bom_ok
 XMLS=tests/input_samples/
 
 deb:
