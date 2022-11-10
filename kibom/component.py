@@ -184,8 +184,9 @@ class Component():
         return self.element.get("sheetpath", "names")
 
     def getDescription(self):
-        # Give more precedence to a field defined by the user
-        # See https://github.com/SchrodingersGat/KiBoM/issues/176
+        """Extract the 'description' field for this component"""
+
+        # Give priority to a user "description" field
         ret = self.element.get("field", "name", "description")
         if ret:
             return ret

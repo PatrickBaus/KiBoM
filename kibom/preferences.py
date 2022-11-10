@@ -46,8 +46,8 @@ class BomPref:
     OPT_COMPLEX_VARIANT = "complex_variant"
     OPT_HIDE_HEADERS = "hide_headers"
     OPT_HIDE_PCB_INFO = "hide_pcb_info"
-    OPT_DATASHEET_AS_LINK = "datasheet_as_link"  # (#112)
     OPT_REF_SEPARATOR = "ref_separator"
+    OPT_DATASHEET_AS_LINK = "datasheet_as_link"
 
     def __init__(self):
         # List of headings to ignore in BoM generation
@@ -77,7 +77,7 @@ class BomPref:
         self.refSeparator = " "
 
         self.backup = "%O.tmp"  # If no .INI file is provided we create *.tmp back-ups
-        self.as_link = ''  # (#112)
+        self.as_link = ''
 
         self.separatorCSV = None
         self.outputFileName = "%O_bom_%v%V"
@@ -268,7 +268,6 @@ class BomPref:
         cf.set(self.SECTION_GENERAL, '; Make a backup of the bom before generating the new one, using the following template')
         cf.set(self.SECTION_GENERAL, self.OPT_BACKUP, self.backup)
 
-        # (#112)
         cf.set(self.SECTION_GENERAL, '; Put the datasheet as a link for the following field')
         cf.set(self.SECTION_GENERAL, self.OPT_DATASHEET_AS_LINK, self.as_link)
 

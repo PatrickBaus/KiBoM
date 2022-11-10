@@ -53,7 +53,7 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
     nFitted = sum([g.getCount() for g in groups if g.isFitted()])
     nBuild = nFitted * prefs.boards
 
-    link_datasheet = prefs.as_link  # (#112)
+    link_datasheet = prefs.as_link
     link_digikey = None
     if prefs.digikey_link:
         link_digikey = prefs.digikey_link.split("\t")
@@ -139,7 +139,7 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
                 if link_mouser and headings[n] in link_mouser:
                     r = '<a href="https://www.mouser.com/ProductDetail/' + r + '">' + r + '</a>'
 
-                # Link this column to the datasheet? (#112)
+                # Link this column to the datasheet?
                 if link_datasheet and headings[n] == link_datasheet:
                     r = '<a href="' + group.getField(ColumnList.COL_DATASHEET_L) + '">' + r + '</a>'
 
@@ -187,9 +187,9 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
  
                 for n, r in enumerate(row):
 
-                    # Link this column to the datasheet? (#112)
+                    # Link this column to the datasheet?
                     if link_datasheet and headings[n] == link_datasheet:
-                        r = '<a href="' + group.getField(ColumnList.COL_DATASHEET_L) + '">' + r + '</a>'
+                        r = '<a href="' + group.getField(ColumnList.COL_DATASHEET) + '">' + r + '</a>'
 
                     if link_digikey and headings[n] in link_digikey:
                         r = '<a href="https://www.digikey.com/en/products?mpart=' + r + '">' + r + '</a>'
