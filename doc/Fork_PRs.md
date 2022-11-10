@@ -6,8 +6,6 @@ This document explains the additions to the original KiBoM code.
 
 ### Interesting additions
 
-- [Links to datasheet in a configurable column](Fork_PRs/Datasheet_as_link.md) (#112)
-
 ### Small additions
 
 - [Do not report warnings about conflicts in `Config` field](Fork_PRs/No_config_conflicts.md) (#122)
@@ -28,6 +26,7 @@ This document explains the additions to the original KiBoM code.
 - [Command line compatibility with older versions](Fork_PRs/CLI_compatibility.md)
 - [Smarter R, L and C sort](Fork_PRs/Smart_sort_for_RLC.md)
 - [Add a mechanism to rename columns](Fork_PRs/Column_Rename.md) (#120)
+- [Links to datasheet in a configurable column](Fork_PRs/Datasheet_as_link.md) (#112)
 
 ### Small additions
 
