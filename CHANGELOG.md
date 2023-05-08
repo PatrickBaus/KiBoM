@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.0] - 2023-05-08
+### Added
+- KiCad 7 DNP support
+- Flexible Description capitalization
+
 ## [1.8.0-3] - 2022-11-07
 ### Added
 - Mouser links
