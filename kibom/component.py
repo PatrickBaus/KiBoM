@@ -191,6 +191,10 @@ class Component():
         if ret:
             return ret
 
+        ret = self.element.get("field", "name", "Description")
+        if ret:
+            return ret
+
         try:
             ret = self.element.get("libsource", "description")
         except:
@@ -346,6 +350,12 @@ class Component():
 
     def isFitted(self):
         """ Determine if a component is FITTED or not """
+
+        # First, check for the 'dnp' attribute (added in KiCad 7.0)
+        for child in self.element.getChildren():
+            if child.name == 'property':
+                if child.attributes.get('name', '').lower() == 'dnp':
+                    return False
 
         # Check the value field first
         if self.getValue().lower() in DNF:
