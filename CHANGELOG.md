@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.9.1-2] - 2023-11-30
+### Fixed
+- exclude_from_bom property not honored
+
 ## [1.9.1] - 2023-11-24
 ### Added
 - LCSC links
