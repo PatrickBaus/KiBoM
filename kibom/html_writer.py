@@ -35,7 +35,7 @@ def link(text):
 
 def WriteHTML(filename, groups, net, headings, head_names, prefs):
     """
-    Write BoM out to a HTML file
+    Write out BoM to an HTML file
     filename = path to output file (must be a .htm or .html file)
     groups = [list of ComponentGroup groups]
     net = netlist object

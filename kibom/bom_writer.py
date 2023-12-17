@@ -37,7 +37,7 @@ def WriteBoM(filename, groups, net, headings=columns.ColumnList._COLUMNS_DEFAULT
     if not prefs:
         prefs = BomPref()
 
-    # Remove any headings that appear in the ignore[] list
+    # Remove any headings that appear in the ignore list
     headings = [h for h in headings if not h.lower() in prefs.ignore]
     # Allow renaming the columns
     head_names = [h if h.lower() not in prefs.colRename else prefs.colRename[h.lower()] for h in headings]

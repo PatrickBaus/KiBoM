@@ -277,7 +277,7 @@ class TestContext(object):
             cmd = cmd + extra
         if not no_subdir:
             # This changed in 1.7.x the path indicated in the output name is ignored.
-            # The only way is specify an absolute path here.
+            # The only way is to specify an absolute path here.
             cmd = cmd + ['-d', os.path.abspath(self.output_dir)]
         cmd.append(filename if filename else self.netlist_file)
         cmd.append(self.prj_name + '.' + self.ext)

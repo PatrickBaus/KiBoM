@@ -85,7 +85,7 @@ def writeVariant(input_file, output_dir, output_file, variant, preferences):
             for component in components:
                 keep = True
                 for dnp in do_not_populate:
-                    # If component reference if found in dnp list: set for removal
+                    # If component reference is found in dnp list: set for removal
                     if component.getRef() == dnp.getRef():
                         keep = False
                         break
@@ -215,7 +215,7 @@ def main():
     if args.cfg:
         config_file = args.cfg
 
-    # Read preferences from file. If file does not exists, default preferences will be used
+    # Read preferences from file. If file does not exist, default preferences will be used
     pref = BomPref()
 
     have_cfile = os.path.exists(config_file)
