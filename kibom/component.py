@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import unicode_literals
-
 import re
-import sys
+from typing import Iterable, List
 
+from .case_insensitive_dict import CaseInsensitiveDict
 from .columns import ColumnList
 from .preferences import BomPref
 from . import units
@@ -37,7 +36,7 @@ DNC = [
 ]
 
 
-class Component():
+class Component:
     """Class for a component, aka 'comp' in the xml netlist file.
     This component class is implemented by wrapping an xmlElement instance
     with accessors.  The xmlElement is held in field 'element'.
@@ -108,7 +107,7 @@ class Component():
         """
         Equivalency operator is used to determine if two parts are 'equal'
         """
-        
+
         # 'fitted' value must be the same for both parts
         if self.isFitted() != other.isFitted():
             return False
@@ -122,11 +121,11 @@ class Component():
 
         for c in self.prefs.groups:
             # Perform special matches
-            if c.lower() == ColumnList.COL_VALUE_L:
+            if c.lower() == ColumnList.COL_VALUE.lower():
                 if not self.compareValue(other):
                     return False
             # Match part name
-            elif c.lower() == ColumnList.COL_PART_L:
+            elif c.lower() == ColumnList.COL_PART.lower():
                 if not self.comparePartName(other):
                     return False
 
@@ -144,7 +143,7 @@ class Component():
         Get the reference prefix
         e.g. if this component has a reference U12, will return "U"
         """
-        
+
         prefix = ""
 
         for c in self.getRef():
@@ -160,7 +159,7 @@ class Component():
         Return the reference suffix #
         e.g. if this component has a reference U12, will return "12"
         """
-        
+
         suffix = ""
 
         for c in self.getRef():
@@ -264,7 +263,7 @@ class Component():
 
         return None
 
-    def getField(self, name):
+    def getField(self, name: str) -> str:
         """Return the value of a field named name. The component is first
         checked for the field, and then the components library part is checked
         for the field. If the field doesn't exist in either, an empty string is
@@ -277,24 +276,24 @@ class Component():
         fp = self.getFootprint().split(":")
 
         name = name.lower()
-        if name == ColumnList.COL_REFERENCE_L:
+        if name == ColumnList.COL_REFERENCE.lower():
             return self.getRef().strip()
 
-        elif name == ColumnList.COL_DESCRIPTION_L:
+        elif name == ColumnList.COL_DESCRIPTION.lower():
             return self.getDescription().strip()
 
-        elif name == ColumnList.COL_DATASHEET_L:
+        elif name == ColumnList.COL_DATASHEET.lower():
             return self.getDatasheet().strip()
 
         # Footprint library is first element
-        elif name == ColumnList.COL_FP_LIB_L:
+        elif name == ColumnList.COL_FP_LIB.lower():
             if len(fp) > 1:
                 return fp[0].strip()
             else:
                 # Explicit empty return
                 return ""
 
-        elif name == ColumnList.COL_FP_L:
+        elif name == ColumnList.COL_FP.lower():
             if len(fp) > 1:
                 return fp[1].strip()
             elif len(fp) == 1:
@@ -302,21 +301,21 @@ class Component():
             else:
                 return ""
 
-        elif name == ColumnList.COL_VALUE_L:
+        elif name == ColumnList.COL_VALUE.lower():
             return self.getValue().strip()
 
-        elif name == ColumnList.COL_PART_L:
+        elif name == ColumnList.COL_PART.lower():
             return self.getPartName().strip()
 
-        elif name == ColumnList.COL_PART_LIB_L:
+        elif name == ColumnList.COL_PART_LIB.lower():
             return self.getLibName().strip()
 
         elif name.lower() == ColumnList.COL_SHEETPATH.lower():
             return self.getSheetpathNames().strip()
 
-        # Other fields (case insensitive)
+        # Other fields (case-insensitive)
         for f in self.getFieldNames():
-            if f == name:
+            if f.lower() == name:
                 field = self.element.get("field", "name", f)
 
                 if field == "":
@@ -328,21 +327,21 @@ class Component():
         # Could not find a matching field
         return ""
 
-    def getFieldNames(self):
+    def getFieldNames(self) -> List[str]:
         """Return a list of field names in play for this component.  Mandatory
         fields are not included, and they are: Value, Footprint, Datasheet, Ref.
         The netlist format only includes fields with non-empty values.  So if a field
         is empty, it will not be present in the returned list.
         """
 
-        fieldNames = []
-        
+        fieldNames: List[str] = []
+
         fields = self.element.getChild('fields')
-        
+
         if fields:
             for f in fields.getChildren():
-                fieldNames.append(f.get('field', 'name').lower())
-        
+                fieldNames.append(f.get('field', 'name'))
+
         return fieldNames
 
     def getRef(self):
@@ -437,12 +436,7 @@ class Component():
                     pass
 
                 if re.search(regex, field_value, flags=re.IGNORECASE) is not None:
-                    debug.info("Excluding '{ref}': Field '{field}' ({value}) matched '{reg}'".format(
-                        ref=self.getRef(),
-                        field=field_name,
-                        value=field_value,
-                        reg=regex).encode('utf-8')
-                    )
+                    debug.info(f"Excluding '{self.getRef()}': Field '{field_name}' ({field_value}) matched '{regex}'")
 
                     # Found a match
                     return True
@@ -493,7 +487,7 @@ class joiner:
         self.stack = []
 
     def add(self, P, N):
-        
+
         if self.stack == []:
             self.stack.append(((P, N), (P, N)))
             return
@@ -538,9 +532,9 @@ class ComponentGroup():
     Initialize the group with no components, and default fields
     """
     def __init__(self, prefs=None):
-        self.components = []
-        # Columns loaded from KiCad
-        self.fields = {c.lower(): None for c in ColumnList._COLUMNS_DEFAULT}
+        self.components: List[Component] = []
+
+        self.fields = CaseInsensitiveDict.fromkeys(ColumnList._COLUMNS_DEFAULT)  # Columns loaded from KiCad
 
         if not prefs:
             prefs = BomPref()
@@ -549,11 +543,10 @@ class ComponentGroup():
 
     def getField(self, field):
 
-        field = field.lower()
         if field not in self.fields or not self.fields[field]:
             return ""
-        
-        return u''.join(self.fields[field])
+
+        return "".join(self.fields[field])
 
     def getCount(self):
         return len(self.components)
@@ -578,7 +571,7 @@ class ComponentGroup():
 
         return False
 
-    def addComponent(self, c):
+    def addComponent(self, c: Component):
         # Add a component to the group
 
         if len(self.components) == 0:
@@ -620,9 +613,8 @@ class ComponentGroup():
         elif fieldData == "" or fieldData is None:
             return
 
-        field = field.lower()
         # Protected fields cannot be overwritten
-        if field in ColumnList._COLUMNS_PROTECTED_L:
+        if field in ColumnList._COLUMNS_DEFAULT:
             return
 
         if (field not in self.fields) or (self.fields[field] is None) or (self.fields[field] == ""):
@@ -630,60 +622,50 @@ class ComponentGroup():
         elif fieldData.lower() in self.fields[field].lower():
             return
         else:
-            if field != self.prefs.configField:
-                debug.warning("Field conflict: ({refs}) [{name}] : '{flds}' <- '{fld}'".format(
-                    refs=self.getRefs(),
-                    name=field,
-                    flds=self.fields[field],
-                    fld=fieldData).encode('utf-8'))
+            if field.lower() != self.prefs.configField:
+                debug.warning(f"Field conflict: ({self.getRefs()}) [{field}] : '{self.fields[field]}' <- '{fieldData}'")
             self.fields[field] += " " + fieldData
 
     def updateFields(self, usealt=False, wrapN=None):
         for c in self.components:
             for f in c.getFieldNames():
-
-                # These columns are handled explicitly below
-                if f in ColumnList._COLUMNS_PROTECTED_L:
-                    continue
-
                 self.updateField(f, c.getField(f))
 
         # Update 'global' fields
         if usealt:
-            self.fields[ColumnList.COL_REFERENCE_L] = self.getAltRefs()
+            self.fields[ColumnList.COL_REFERENCE] = self.getAltRefs()
         else:
-            self.fields[ColumnList.COL_REFERENCE_L] = self.getRefs()
+            self.fields[ColumnList.COL_REFERENCE] = self.getRefs()
 
         q = self.getCount()
-        self.fields[ColumnList.COL_GRP_QUANTITY_L] = "{n}{dnf}{dnc}".format(
+        self.fields[ColumnList.COL_GRP_QUANTITY] = "{n}{dnf}{dnc}".format(
             n=q,
             dnf=" (DNF)" if not self.isFitted() else "",
             dnc=" (DNC)" if self.isFixed() else "")
 
-        self.fields[ColumnList.COL_GRP_BUILD_QUANTITY_L] = str(q * self.prefs.boards) if self.isFitted() else "0"
-        self.fields[ColumnList.COL_VALUE_L] = self.components[0].getValue()
-        self.fields[ColumnList.COL_PART_L] = self.components[0].getPartName()
-        self.fields[ColumnList.COL_PART_LIB_L] = self.components[0].getLibName()
-        self.fields[ColumnList.COL_DESCRIPTION_L] = self.components[0].getDescription()
-        self.fields[ColumnList.COL_DATASHEET_L] = self.components[0].getDatasheet()
-        self.fields[ColumnList.COL_SHEETPATH_L] = self.components[0].getSheetpathNames()
+        self.fields[ColumnList.COL_GRP_BUILD_QUANTITY] = str(q * self.prefs.boards) if self.isFitted() else "0"
+        self.fields[ColumnList.COL_VALUE] = self.components[0].getValue()
+        self.fields[ColumnList.COL_PART] = self.components[0].getPartName()
+        self.fields[ColumnList.COL_PART_LIB] = self.components[0].getLibName()
+        self.fields[ColumnList.COL_DESCRIPTION] = self.components[0].getDescription()
+        self.fields[ColumnList.COL_DATASHEET] = self.components[0].getDatasheet()
+        self.fields[ColumnList.COL_SHEETPATH] = self.components[0].getSheetpathNames()
 
         # Footprint field requires special attention
         fp = self.components[0].getFootprint().split(":")
 
         if len(fp) >= 2:
-            self.fields[ColumnList.COL_FP_LIB_L] = fp[0]
-            self.fields[ColumnList.COL_FP_L] = fp[1]
+            self.fields[ColumnList.COL_FP_LIB] = fp[0]
+            self.fields[ColumnList.COL_FP] = fp[1]
         elif len(fp) == 1:
-            self.fields[ColumnList.COL_FP_LIB_L] = ""
-            self.fields[ColumnList.COL_FP_L] = fp[0]
+            self.fields[ColumnList.COL_FP_LIB] = ""
+            self.fields[ColumnList.COL_FP] = fp[0]
         else:
-            self.fields[ColumnList.COL_FP_LIB_L] = ""
-            self.fields[ColumnList.COL_FP_L] = ""
+            self.fields[ColumnList.COL_FP_LIB] = ""
+            self.fields[ColumnList.COL_FP] = ""
 
     # Return a dict of the KiCad data based on the supplied columns
-    # NOW WITH UNICODE SUPPORT!
-    def getRow(self, columns):
+    def getRow(self, columns: Iterable[str]) -> List[str]:
         row = []
         for key in columns:
             val = self.getField(key)
@@ -703,9 +685,7 @@ class ComponentGroup():
             if val is None:
                 val = ""
             else:
-                val = u'' + val
-                if sys.version_info[0] < 3:
-                    val = val.encode('utf-8')
+                val = "" + val
 
             row.append(val)
 

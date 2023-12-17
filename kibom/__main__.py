@@ -24,6 +24,7 @@ import os
 import argparse
 import locale
 
+from kibom.case_insensitive_dict import CaseInsensitiveDict
 from .columns import ColumnList
 from .netlist_reader import netlist
 from .bom_writer import WriteBoM
@@ -36,17 +37,11 @@ VARIANT_FIELD_SEPARATOR = ':'
 
 
 def writeVariant(input_file, output_dir, output_file, variant, preferences):
-    
+
     if variant is not None:
         preferences.pcbConfig = variant.strip().lower().split(',')
-        
+
     debug.message("PCB variant:", ", ".join(preferences.pcbConfig))
-
-    # Individual components
-    components = []
-
-    # Component groups
-    groups = []
 
     # Read out the netlist
     net = netlist(input_file, prefs=preferences)
@@ -103,16 +98,16 @@ def writeVariant(input_file, output_dir, output_file, variant, preferences):
     # Group the components
     groups = net.groupComponents(components)
 
-    columns = ColumnList(preferences.corder)
+    columns = CaseInsensitiveDict.fromkeys(preferences.corder)
 
     # Read out all available fields
     for g in groups:
         for f in g.fields:
-            columns.AddColumn(f)
+            columns[f] = None
 
     # Don't add 'boards' column if only one board is specified
     if preferences.boards <= 1:
-        columns.RemoveColumn(ColumnList.COL_GRP_BUILD_QUANTITY)
+        columns.pop(ColumnList.COL_GRP_BUILD_QUANTITY, None)
         debug.info("Removing:", ColumnList.COL_GRP_BUILD_QUANTITY)
 
     if output_file is None:
@@ -146,7 +141,7 @@ def writeVariant(input_file, output_dir, output_file, variant, preferences):
 
     debug.message("Saving BOM File:", output_file)
 
-    return WriteBoM(output_file, groups, net, columns.columns, preferences)
+    return WriteBoM(output_file, groups, net, columns.keys(), preferences)
 
 
 def main():
@@ -173,7 +168,7 @@ def main():
     debug.setDebugLevel(int(args.verbose) if args.verbose is not None else debug.MSG_ERROR)
 
     debug.message("KiBOM version {v}".format(v=KIBOM_VERSION))
-    
+
     input_file = os.path.abspath(args.netlist)
 
     input_dir = os.path.abspath(os.path.dirname(input_file))

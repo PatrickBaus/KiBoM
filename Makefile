@@ -25,7 +25,7 @@ test_local: lint
 	rm -rf $(OUT_DIR)
 	rm -f tests/input_samples/bom.ini
 	$(PY_COV) erase
-	pytest-3 --test_dir $(OUT_DIR)
+	${PYTEST} --test_dir $(OUT_DIR)
 	$(PY_COV) report
 	$(PY_COV) html
 	$(BROWSER) htmlcov/index.html

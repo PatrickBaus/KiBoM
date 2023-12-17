@@ -12,10 +12,11 @@ from __future__ import print_function
 import sys
 import os.path
 import xml.sax as sax
+from typing import Iterable, List
 
 from .component import Component, ComponentGroup
 from .preferences import BomPref
-from . import debug
+from . import component, debug
 
 
 class xmlElement():
@@ -187,7 +188,7 @@ class netlist():
 
         """
         self.design = None
-        self.components = []
+        self.components: List[component] = []
         self.libparts = []
         self.libraries = []
         self.nets = []
@@ -308,13 +309,13 @@ class netlist():
         """Return the verison of the sheet info"""
 
         sheet = self.getSheet()
-        
+
         if sheet is None:
             return ""
-        
+
         return sheet.get("rev")
 
-    def getInterestingComponents(self):
+    def getInterestingComponents(self) -> List[component]:
 
         # Copy out the components
         ret = [c for c in self.components]
@@ -324,7 +325,7 @@ class netlist():
 
         return ret
 
-    def groupComponents(self, components):
+    def groupComponents(self, components: Iterable[component]) -> List[ComponentGroup]:
 
         groups = []
 

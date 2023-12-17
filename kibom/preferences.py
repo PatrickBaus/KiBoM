@@ -5,6 +5,7 @@ import sys
 import re
 import os
 
+from .case_insensitive_dict import CaseInsensitiveDict
 from .columns import ColumnList
 from . import debug
 
@@ -52,11 +53,11 @@ class BomPref:
 
     def __init__(self):
         # List of headings to ignore in BoM generation
-        self.ignore = [
-            ColumnList.COL_PART_LIB_L,
-            ColumnList.COL_FP_LIB_L,
-            ColumnList.COL_SHEETPATH_L,
-        ]
+        self.ignore = CaseInsensitiveDict.fromkeys([
+            ColumnList.COL_PART_LIB,
+            ColumnList.COL_FP_LIB,
+            ColumnList.COL_SHEETPATH,
+        ])
 
         self.corder = ColumnList._COLUMNS_DEFAULT
         self.useAlt = False  # Use alternate reference representation
@@ -73,7 +74,7 @@ class BomPref:
         self.mergeBlankFields = True  # Blanks fields will be merged when possible
         self.hideHeaders = False
         self.hidePcbInfo = False
-        self.configField = "Config"  # Default field used for part fitting config
+        self.configField = "config"  # Default field used for part fitting config
         self.pcbConfig = ["default"]
         self.complexVariant = False  # To enable complex variant processing
         self.refSeparator = " "
@@ -195,7 +196,9 @@ class BomPref:
 
         # Read out ignored-rows
         if self.SECTION_IGNORE in cf.sections():
-            self.ignore = [i.lower() for i in cf.options(self.SECTION_IGNORE)]
+            self.ignore = CaseInsensitiveDict.fromkeys([
+                key if value is None else key+value for key, value in cf.items(self.SECTION_IGNORE)
+            ])
 
         # Read out column order
         if self.SECTION_COLUMN_ORDER in cf.sections():
@@ -252,7 +255,7 @@ class BomPref:
         self.addOption(cf, self.OPT_GROUP_CONN, self.groupConnectors, comment="If '{opt}' option is set to 1, connectors with the same footprints will be grouped together, independent of the name of the connector".format(opt=self.OPT_GROUP_CONN))
         self.addOption(cf, self.OPT_USE_REGEX, self.useRegex, comment="If '{opt}' option is set to 1, each component group will be tested against a number of regular-expressions (specified, per column, below). If any matches are found, the row is ignored in the output file".format(opt=self.OPT_USE_REGEX))
         self.addOption(cf, self.OPT_MERGE_BLANK, self.mergeBlankFields, comment="If '{opt}' option is set to 1, component groups with blank fields will be merged into the most compatible group, where possible".format(opt=self.OPT_MERGE_BLANK))
-        
+
         cf.set(self.SECTION_GENERAL, "; Specify output file name format, %O is the defined output name, %v is the version, %V is the variant name which will be ammended according to 'variant_file_name_format'.")
         cf.set(self.SECTION_GENERAL, self.OPT_OUTPUT_FILE_NAME, self.outputFileName)
 
@@ -286,7 +289,7 @@ class BomPref:
 
         cf.set(self.SECTION_GENERAL, '; Interpret as a Digikey P/N and link the following field')
         cf.set(self.SECTION_GENERAL, self.OPT_DIGIKEY_LINK, self.digikey_link)
-        
+
         cf.set(self.SECTION_GENERAL, '; Interpret as a MOUSER P/N and link the following field')
         cf.set(self.SECTION_GENERAL, self.OPT_MOUSER_LINK, self.mouser_link)
 

@@ -12,12 +12,11 @@ BG_EMPTY = "#FF8080"
 def bgColor(col):
     """ Return a background color for a given column title """
 
-    col = col.lower()
     # Auto-generated columns
-    if col in ColumnList._COLUMNS_GEN_L:
+    if col in ColumnList._COLUMNS_GEN:
         return BG_GEN
     # KiCad protected columns
-    elif col in ColumnList._COLUMNS_PROTECTED_L:
+    elif col in ColumnList._COLUMNS_DEFAULT:
         return BG_KICAD
     # Additional user columns
     else:
@@ -105,7 +104,7 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
 
         # Row titles:
         html.write("<tr>\n")
-        
+
         if prefs.numberRows:
             html.write("\t<th></th>\n")
 
@@ -147,7 +146,7 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
 
                 # Link this column to the datasheet?
                 if link_datasheet and headings[n] == link_datasheet:
-                    r = '<a href="' + group.getField(ColumnList.COL_DATASHEET_L) + '">' + r + '</a>'
+                    r = '<a href="' + group.getField(ColumnList.COL_DATASHEET.lower()) + '">' + r + '</a>'
 
                 if (len(r) == 0) or (r.strip() == "~"):
                     bg = BG_EMPTY
@@ -163,10 +162,10 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
 
         if prefs.generateDNF and rowCount != len(groups):
             html.write("<h2>Optional components (DNF=Do Not Fit)</h2>\n")
- 
+
             # DNF component groups
             html.write('<table border="1">\n')
- 
+
             # Row titles:
             html.write("<tr>\n")
             if prefs.numberRows:
@@ -176,21 +175,21 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
                 bg = bgColor(headings[i])
                 html.write('\t<th align="center"{bg}>{h}</th>\n'.format(h=h, bg=' bgcolor="{c}"'.format(c=bg) if bg else ''))
             html.write("</tr>\n")
- 
+
             rowCount = 0
- 
+
             for i, group in enumerate(groups):
- 
+
                 if not (prefs.ignoreDNF and not group.isFitted()):
                     continue
- 
+
                 row = group.getRow(headings)
                 rowCount += 1
                 html.write("<tr>\n")
- 
+
                 if prefs.numberRows:
                     html.write('\t<td align="center">{n}</td>\n'.format(n=rowCount))
- 
+
                 for n, r in enumerate(row):
 
                     # Link this column to the datasheet?
@@ -210,9 +209,9 @@ def WriteHTML(filename, groups, net, headings, head_names, prefs):
                         bg = BG_EMPTY
                     else:
                         bg = bgColor(headings[n])
- 
+
                     html.write('\t<td align="center"{bg}>{val}</td>\n'.format(bg=' bgcolor={c}'.format(c=bg) if bg else '', val=link(r)))
- 
+
                 html.write("</tr>\n")
 
             html.write("</table>\n")

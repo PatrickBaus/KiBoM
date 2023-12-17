@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from typing import List
 
+from .component import ComponentGroup
 from .csv_writer import WriteCSV
+from .netlist_reader import netlist
 from .xml_writer import WriteXML
 from .html_writer import WriteHTML
 from .xlsx_writer import WriteXLSX
@@ -22,7 +25,7 @@ def TmpFileCopy(filename, fmt):
         shutil.copyfile(filename, fmt.replace("%O", filename))
 
 
-def WriteBoM(filename, groups, net, headings=columns.ColumnList._COLUMNS_DEFAULT, prefs=None):
+def WriteBoM(filename: str, groups: List[ComponentGroup], net: netlist, headings: List[str] = columns.ColumnList._COLUMNS_DEFAULT, prefs=None):
     """
     Write BoM to file
     filename = output file path
@@ -38,7 +41,7 @@ def WriteBoM(filename, groups, net, headings=columns.ColumnList._COLUMNS_DEFAULT
         prefs = BomPref()
 
     # Remove any headings that appear in the ignore list
-    headings = [h for h in headings if not h.lower() in prefs.ignore]
+    headings = [h for h in headings if h.lower() not in prefs.ignore]
     # Allow renaming the columns
     head_names = [h if h.lower() not in prefs.colRename else prefs.colRename[h.lower()] for h in headings]
 

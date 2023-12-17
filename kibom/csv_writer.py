@@ -3,9 +3,13 @@
 import csv
 import os
 import sys
+from typing import List
+
+from kibom.component import ComponentGroup
+from kibom.netlist_reader import netlist
 
 
-def WriteCSV(filename, groups, net, headings, head_names, prefs):
+def WriteCSV(filename: str, groups: List[ComponentGroup], net: netlist, headings: List[str], head_names: List[str], prefs):
     """
     Write BoM out to a CSV file
     filename = path to output file (must be a .csv, .txt or .tsv file)
