@@ -108,7 +108,7 @@ class Component():
         """
         Equivalency operator is used to determine if two parts are 'equal'
         """
-        
+
         # 'fitted' value must be the same for both parts
         if self.isFitted() != other.isFitted():
             return False
@@ -144,7 +144,7 @@ class Component():
         Get the reference prefix
         e.g. if this component has a reference U12, will return "U"
         """
-        
+
         prefix = ""
 
         for c in self.getRef():
@@ -160,7 +160,7 @@ class Component():
         Return the reference suffix #
         e.g. if this component has a reference U12, will return "12"
         """
-        
+
         suffix = ""
 
         for c in self.getRef():
@@ -258,7 +258,7 @@ class Component():
         fields = self.element.getChild('fields')
         if fields:
             for field in fields.getChildren():
-                if field.get('field', 'name') == name:
+                if field.get('field', 'name').lower() == name.lower():
                     field.setChars(value)
                     return value
 
@@ -336,13 +336,13 @@ class Component():
         """
 
         fieldNames = []
-        
+
         fields = self.element.getChild('fields')
-        
+
         if fields:
             for f in fields.getChildren():
                 fieldNames.append(f.get('field', 'name').lower())
-        
+
         return fieldNames
 
     def getRef(self):
@@ -493,7 +493,7 @@ class joiner:
         self.stack = []
 
     def add(self, P, N):
-        
+
         if self.stack == []:
             self.stack.append(((P, N), (P, N)))
             return
@@ -552,7 +552,7 @@ class ComponentGroup():
         field = field.lower()
         if field not in self.fields or not self.fields[field]:
             return ""
-        
+
         return u''.join(self.fields[field])
 
     def getCount(self):
